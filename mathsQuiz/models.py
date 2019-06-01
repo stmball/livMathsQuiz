@@ -4,10 +4,26 @@ from django.db import models
 
 
 
+class Quiz(models.Model):
+
+    # Field for entering the name of a field.
+    name = models.CharField(max_length=30, help_text='The name of the quiz.')
+
+    
+
+
+    # This tells Django to refer to Quizzes by their titles.
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = "quizzes"
 
 
 class Question(models.Model):
 
+    # Creaing a "Many to Many" relation with Quizzes - that is, one Quiz can use many Questions, and one Question may be used by many Quizzes.
+    quizzes = models.ManyToManyField(Quiz, related_name='questions')
 
     # Field for the title of the question
     title = models.CharField(max_length=100, help_text='The title of the quesiton.')
@@ -24,23 +40,6 @@ class Question(models.Model):
     # This tells Django to refer to Questions by their title.
     def __str__(self):
         return self.title
-
-class Quiz(models.Model):
-
-    # Field for entering the name of a field.
-    name = models.CharField(max_length=30, help_text='The name of the quiz.')
-
-    
-    # Creaing a "Many to Many" relation with Questions - that is, one Quiz can use many Questions, and one Question may be used by many Quizzes.
-    questions = models.ManyToManyField(Question)
-
-    # This tells Django to refer to Quizzes by their titles.
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = "quizzes"
-
     
 
 # This model exists to log quiz completions, so they can be viewed by the quiz coordinator. No help text for this one as humans shouldn't be interacting with this model directly.

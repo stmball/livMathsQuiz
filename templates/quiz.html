@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container"> 
+    <h1 class="display-3">{{quiz.name}}</h1>
+    <div class="question">
+        <h1 id="question-title">Please enter your name:</h1>
+        <p id="question-text"></p>
+        <input type="text" class="form-control" id="question-input">
+        <button class="btn btn-primary" id="next-button" type="button">Next</button>
+
+
+    </div>
+
+    
+</div>
+
+
+<script type="text/javascript">
+
+    // Parse data for Javascript to use.
+    const questions = {{questions|safe}};
+    const quizName = "{{quiz.name|safe}}";
+
+    // Fetch DOM elements that need changing
+    const questionTitle = document.getElementById("question-title");
+    const questionText = document.getElementById("question-text");
+    const questionInput = document.getElementById("question-input");
+    const nextButton = document.getElementById("next-button");
+
+    // Variable for scoring
+    var score = 0;
+
+    // Variable for storing user's name
+    var name;
+
+    // Variable for storing user's time
+    var start = new Date()
+
+    // Variable for checking if the name has been entered
+    var hasName = false;
+
+    // Variable for iterating through question list
+    var currentIndex = 0;
+
+    console.log(questions)
+
+    function updateQuestion(newQuestion){
+
+        console.log(newQuestion.fields)
+        questionTitle.innerHTML = newQuestion.fields.title;
+        questionText.innerHTML = newQuestion.fields.questionText;
+
+        // Render question using MathJax to enable LaTeX formatting
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub,questionText.innerHTML])
+        return true;
+    }
+
+    function checkQuestion(currentQuestion){
+        if(questionInput.value == currentQuestion.fields.solution) {
+            console.log(currentQuestion)
+            score++;
+        }
+    }
+
+
+
+    nextButton.addEventListener("click", function(){
+        // If the user's name has been entered, mark the question and move on to the next one if there is one left. If not, show the score and time taken.
+        if (hasName) {
+
+            // Check question
+            checkQuestion(questions[currentIndex]);
+
+            // Move onto next question
+            currentIndex++;
+
+            if(currentIndex < questions.length) {
+                // Update the question
+                updateQuestion(questions[currentIndex]);
+            } else {
+                // Calculate time taken
+                end = new Date();
+                delta = end - start
+                console.log(delta)
+                // Show congratulations message
+                questionTitle.innerHTML = "Congratulations! You finished!"
+
+                // Show score and time taken
+                questionText.innerHTML = "Your score was: " + score + ". Well done!";
+                questionInput.style.display = 'none'
+                nextButton.style.display = 'none'
+                
+                // Send data to the back end for parsing
+                logData = {
+                    'quizName': quizName,
+                    'name': name,
+                    'delta': delta,
+                    'score': score,
+                }
+                sendLog(logData)
+            }
+
+
+        } else {
+            // Otherwise, write the user's name to the name variable, and show the first question
+            name = questionInput.value;
+            console.log(name);
+            hasName = true;
+            updateQuestion(questions[0]);
+            return true;
+        }
+    });
+
+
+    // Adding "Enter to submit" functionality
+
+    questionInput.addEventListener("keyup", function(event){
+        console.log("pressed")
+        if(event.key !== "Enter"){
+            return true;
+        } else {
+            console.log("pressed")
+            nextButton.click();
+            questionInput.value = ""
+            event.preventDefault();
+            return true;
+        }
+    })
+
+    // Adding quiz logging
+
+    function sendLog(someData){
+        let data = JSON.stringify(someData)
+        let xhr = new XMLHttpRequest();
+        let token = "{{csrf_token}}";
+        xhr.open("POST", "/" + quizName + "/", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('X-CSRFToken', token);
+        xhr.send(data);
+        console.log("sent");
+        console.log(data);
+        return true;
+    }
+
+
+
+
+
+
+
+</script>
+{% endblock %}

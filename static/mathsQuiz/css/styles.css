@@ -1,0 +1,47 @@
+.jumbotron {
+    margin: 5% 0;
+}
+
+.quiz-container {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+} 
+
+.row {
+    margin: 10px;
+}
+
+.quiz {
+    height: 200px;
+    margin: 10px 2%;
+    padding: 10px;
+}
+
+.quiz-name {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    margin: 0;
+}
+
+.question {
+    text-align: center;
+}
+
+#question-input {
+    margin: 5px auto;
+    width: 200px !important;
+}
+
+@media screen and (max-width:540px){
+    .quiz {
+        width: 96%
+    }
+}
+
+@media screen and (min-width:540px) {
+    .quiz {
+        width: 46%;
+    }
+}
