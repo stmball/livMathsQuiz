@@ -34,6 +34,12 @@
     width: 200px !important;
 }
 
+#homebtn {
+    display: none;
+    width: 200px;
+    margin: 5px auto;
+}
+
 @media screen and (max-width:540px){
     .quiz {
         width: 96%

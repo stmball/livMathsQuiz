@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container"> 
+<div class="container">
     <h1 class="display-3">{{quiz.name}}</h1>
     <div class="question">
         <h1 id="question-title">Please enter your name:</h1>
         <p id="question-text"></p>
-        <input type="text" class="form-control" id="question-input">
+        <input type="text" class="form-control" id="question-input" autocomplete="off">
         <button class="btn btn-primary" id="next-button" type="button">Next</button>
-
+        <a href="/" class="btn btn-primary" id="homebtn">Back to Quizzes</a>
 
     </div>
 
-    
+
 </div>
 
 
 <script type="text/javascript">
 
     // Parse data for Javascript to use.
-    const questions = {{questions|safe}};
+    const questions = {{ questions| safe}};
     const quizName = "{{quiz.name|safe}}";
 
     // Fetch DOM elements that need changing
@@ -35,7 +35,7 @@
     var name;
 
     // Variable for storing user's time
-    var start = new Date()
+    var start
 
     // Variable for checking if the name has been entered
     var hasName = false;
@@ -43,29 +43,34 @@
     // Variable for iterating through question list
     var currentIndex = 0;
 
-    console.log(questions)
+    // Function for diplaying the new question
+    function updateQuestion(newQuestion) {
 
-    function updateQuestion(newQuestion){
+        // Clear the input box
+        questionInput.value = ""
 
-        console.log(newQuestion.fields)
+        // Change the old question title and text to the new question title and text
         questionTitle.innerHTML = newQuestion.fields.title;
         questionText.innerHTML = newQuestion.fields.questionText;
 
         // Render question using MathJax to enable LaTeX formatting
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub,questionText.innerHTML])
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, questionText.innerHTML])
         return true;
     }
 
-    function checkQuestion(currentQuestion){
-        if(questionInput.value == currentQuestion.fields.solution) {
+    // Function for marking
+    function checkQuestion(currentQuestion) {
+        
+        // Check to see if the entered value is the same as the solution of the question
+        if (questionInput.value == currentQuestion.fields.solution) {
             console.log(currentQuestion)
             score++;
         }
     }
 
 
-
-    nextButton.addEventListener("click", function(){
+    // Making the "Next" button work
+    nextButton.addEventListener("click", function () {
         // If the user's name has been entered, mark the question and move on to the next one if there is one left. If not, show the score and time taken.
         if (hasName) {
 
@@ -75,10 +80,17 @@
             // Move onto next question
             currentIndex++;
 
-            if(currentIndex < questions.length) {
+            // If there are questions left
+            if (currentIndex < questions.length) {
+
                 // Update the question
                 updateQuestion(questions[currentIndex]);
+
+            
             } else {
+
+                // If there are no questions left, time the quiz, and submit the data to the log.
+
                 // Calculate time taken
                 end = new Date();
                 delta = end - start
@@ -90,7 +102,8 @@
                 questionText.innerHTML = "Your score was: " + score + ". Well done!";
                 questionInput.style.display = 'none'
                 nextButton.style.display = 'none'
-                
+                document.getElementById('homebtn').style.display = 'block'
+
                 // Send data to the back end for parsing
                 logData = {
                     'quizName': quizName,
@@ -98,15 +111,23 @@
                     'delta': delta,
                     'score': score,
                 }
+
                 sendLog(logData)
             }
 
 
         } else {
+
             // Otherwise, write the user's name to the name variable, and show the first question
             name = questionInput.value;
-            console.log(name);
+            
+            // Enable flag
             hasName = true;
+
+            // Start timer
+            start = new Date()
+
+            // Show first question
             updateQuestion(questions[0]);
             return true;
         }
@@ -115,9 +136,9 @@
 
     // Adding "Enter to submit" functionality
 
-    questionInput.addEventListener("keyup", function(event){
+    questionInput.addEventListener("keyup", function (event) {
         console.log("pressed")
-        if(event.key !== "Enter"){
+        if (event.key !== "Enter") {
             return true;
         } else {
             console.log("pressed")
@@ -130,7 +151,7 @@
 
     // Adding quiz logging
 
-    function sendLog(someData){
+    function sendLog(someData) {
         let data = JSON.stringify(someData)
         let xhr = new XMLHttpRequest();
         let token = "{{csrf_token}}";
