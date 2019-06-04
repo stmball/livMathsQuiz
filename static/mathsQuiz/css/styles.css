@@ -14,19 +14,25 @@
 
 .questions-quiz-name {
     margin-top: 5%;
+    margin-bottom: 3%;
 }
 
 .quiz {
     height: 200px;
     margin: 10px 2%;
-    padding: 10px;
+    padding: 20px;
+    border-radius: 4px;
+    border-color: 0;
 }
 
 .quiz-name {
     position: absolute;
     bottom: 10px;
-    right: 10px;
+    right: 15px;
     margin: 0;
+    text-align: right;
+    font-size: 2rem;
+    color: rgb(16,16,16)
 }
 
 .question {
@@ -53,13 +59,13 @@
     display: none;
 }
 
-@media screen and (max-width:540px){
+@media screen and (max-width:940px){
     .quiz {
         width: 96%
     }
 }
 
-@media screen and (min-width:540px) {
+@media screen and (min-width:940px) {
     .quiz {
         width: 46%;
     }
