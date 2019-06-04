@@ -12,6 +12,10 @@
     margin: 10px;
 }
 
+.questions-quiz-name {
+    margin-top: 5%;
+}
+
 .quiz {
     height: 200px;
     margin: 10px 2%;
@@ -27,6 +31,7 @@
 
 .question {
     text-align: center;
+    margin: 10% 0 !important;
 }
 
 #question-input {
@@ -38,6 +43,14 @@
     display: none;
     width: 200px;
     margin: 5px auto;
+}
+
+#feedback {
+    display: none;
+}
+
+#errorMsg {
+    display: none;
 }
 
 @media screen and (max-width:540px){

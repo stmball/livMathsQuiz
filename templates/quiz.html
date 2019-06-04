@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <h1 class="display-3">{{quiz.name}}</h1>
+<div class="container" style="text-align: center">
+    <h1 class="display-4 questions-quiz-name">{{quiz.name}}</h1>
+    <p id="feedback" class="alert alert-success"></p>
+    <p id="errorMsg" class="alert alert-danger">Please enter your answer as an integer, or leave it blank to skip.</p>
     <div class="question">
-        <h1 id="question-title">Please enter your name:</h1>
-        <p id="question-text"></p>
+        <h1 id="question-title"></h1>
+        <p id="question-text">There are 20 questions, and each has an answer which is an integer.
+            Type your answer into the box below the question and click on the ‘Next’ button; to pass on
+            a question, just click ‘Next’.
+            To start, type your name into the box below and click ‘Next’.</p>
+
         <input type="text" class="form-control" id="question-input" autocomplete="off">
         <button class="btn btn-primary" id="next-button" type="button">Next</button>
         <a href="/" class="btn btn-primary" id="homebtn">Back to Quizzes</a>
@@ -21,12 +27,15 @@
     // Parse data for Javascript to use.
     const questions = {{ questions| safe}};
     const quizName = "{{quiz.name|safe}}";
+    const showSolutions = {{quiz.solutions|lower}};
 
     // Fetch DOM elements that need changing
     const questionTitle = document.getElementById("question-title");
     const questionText = document.getElementById("question-text");
     const questionInput = document.getElementById("question-input");
     const nextButton = document.getElementById("next-button");
+    const feedback = document.getElementById("feedback");
+    const errorMsg = document.getElementById("errorMsg");
 
     // Variable for scoring
     var score = 0;
@@ -49,9 +58,13 @@
         // Clear the input box
         questionInput.value = ""
 
+        // Clear any messages
+        feedback.style.display = 'none'
+        errorMsg.style.display = 'none'
+
         // Change the old question title and text to the new question title and text
         questionTitle.innerHTML = newQuestion.fields.title;
-        questionText.innerHTML = newQuestion.fields.questionText;
+        questionText.innerHTML = newQuestion.fields['Question Text'];
 
         // Render question using MathJax to enable LaTeX formatting
         MathJax.Hub.Queue(["Typeset", MathJax.Hub, questionText.innerHTML])
@@ -63,7 +76,10 @@
         
         // Check to see if the entered value is the same as the solution of the question
         if (questionInput.value == currentQuestion.fields.solution) {
-            console.log(currentQuestion)
+            if (showSolutions){
+                feedback.style.display = 'block'
+                feedback.innerHTML = "Correct!"
+            }
             score++;
         }
     }
@@ -74,47 +90,56 @@
         // If the user's name has been entered, mark the question and move on to the next one if there is one left. If not, show the score and time taken.
         if (hasName) {
 
-            // Check question
-            checkQuestion(questions[currentIndex]);
+            if (Number.isInteger(Number(questionInput.value))){
 
-            // Move onto next question
-            currentIndex++;
+                // Check question
+                checkQuestion(questions[currentIndex]);
 
-            // If there are questions left
-            if (currentIndex < questions.length) {
+                // Move onto next question
+                currentIndex++;
 
-                // Update the question
-                updateQuestion(questions[currentIndex]);
+                // If there are questions left
+                if (currentIndex < questions.length) {
 
-            
-            } else {
+                    // Update the question
+                    updateQuestion(questions[currentIndex]);
 
-                // If there are no questions left, time the quiz, and submit the data to the log.
+                
+                } else {
 
-                // Calculate time taken
-                end = new Date();
-                delta = end - start
-                console.log(delta)
-                // Show congratulations message
-                questionTitle.innerHTML = "Congratulations! You finished!"
+                    // If there are no questions left, time the quiz, and submit the data to the log.
 
-                // Show score and time taken
-                questionText.innerHTML = "Your score was: " + score + ". Well done!";
-                questionInput.style.display = 'none'
-                nextButton.style.display = 'none'
-                document.getElementById('homebtn').style.display = 'block'
+                    // Calculate time taken
+                    end = new Date();
+                    delta = end - start
+                    console.log(delta)
+                    // Show congratulations message
+                    questionTitle.innerHTML = "That’s the end of the quiz."
 
-                // Send data to the back end for parsing
-                logData = {
-                    'quizName': quizName,
-                    'name': name,
-                    'delta': delta,
-                    'score': score,
+                    // Show score and time taken
+                    questionText.innerHTML = "We hope you enjoyed it. You can try it again if you want.";
+                    questionInput.style.display = 'none'
+                    nextButton.style.display = 'none'
+                    document.getElementById('homebtn').style.display = 'block'
+                    
+                    // Clear any error messages
+                    errorMsg.style.display = 'none'
+
+                    // Send data to the back end for parsing
+                    logData = {
+                        'quizName': quizName,
+                        'name': name,
+                        'delta': delta,
+                        'score': score,
+                    }
+
+                    sendLog(logData);
                 }
 
-                sendLog(logData)
-            }
+            } else {
 
+                errorMsg.style.display = "block"
+            }
 
         } else {
 
@@ -127,6 +152,9 @@
             // Start timer
             start = new Date()
 
+            // Change text box type to number
+            questionInput.type = "number"
+
             // Show first question
             updateQuestion(questions[0]);
             return true;
@@ -137,11 +165,9 @@
     // Adding "Enter to submit" functionality
 
     questionInput.addEventListener("keyup", function (event) {
-        console.log("pressed")
         if (event.key !== "Enter") {
             return true;
         } else {
-            console.log("pressed")
             nextButton.click();
             questionInput.value = ""
             event.preventDefault();
@@ -159,8 +185,6 @@
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.setRequestHeader('X-CSRFToken', token);
         xhr.send(data);
-        console.log("sent");
-        console.log(data);
         return true;
     }
 

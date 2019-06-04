@@ -1,5 +1,5 @@
 from django.contrib import admin
-from mathsQuiz.models import Quiz, Question, CompletionLog
+from mathsQuiz.models import Quiz, Question, CompletionLog, QuestionSet
 from django.contrib.admin.filters import DateFieldListFilter
 from django.utils import timezone
 from django.db import models
@@ -13,6 +13,8 @@ admin.site.index_title = "Quiz Dashboard"
 
 admin.site.register(Quiz)
 admin.site.register(Question)
+admin.site.register(QuestionSet)
+
 
 # Class extension to the default date filter to more relevant timescales for the quizzes
 

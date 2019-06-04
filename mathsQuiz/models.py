@@ -4,13 +4,30 @@ from django.db import models
 
 
 
+# Go between model for Quizzes and Questions to allow for better organisation
+class QuestionSet(models.Model):
+
+    # Name for the question set
+    name = models.CharField(max_length=30, help_text='The name for the question set')
+
+    def __str__(self):
+        return self.name
+
+
+
 class Quiz(models.Model):
 
     # Field for entering the name of a field.
     name = models.CharField(max_length=30, help_text='The name of the quiz.')
 
-    
+    # Organisational entry for question sets.
+    questionSet = models.ForeignKey(QuestionSet, on_delete=models.CASCADE, related_name='quizzes')
 
+    # Whether or not we show the user if their answer is right or wrong
+    solutions = models.BooleanField(help_text='Tick this if you want solution feedback (eg You got the last question correct!)', default=True)
+
+    # Whether or not a quiz is active or not
+    active = models.BooleanField(help_text='Tick this if the quiz is currently active', default=False)
 
     # This tells Django to refer to Quizzes by their titles.
     def __str__(self):
@@ -20,10 +37,12 @@ class Quiz(models.Model):
         verbose_name_plural = "quizzes"
 
 
+
+
 class Question(models.Model):
 
-    # Creaing a "Many to Many" relation with Quizzes - that is, one Quiz can use many Questions, and one Question may be used by many Quizzes.
-    quizzes = models.ManyToManyField(Quiz, related_name='questions')
+    # Creaing a "Many to Many" relation with Question Sets - that is, one Question Set can use many Questions, and one Question may be used by many Qusetion Sets.
+    questionSet = models.ManyToManyField(QuestionSet, related_name='questions', name='Question Set')
 
     # Field for the title of the question
     title = models.CharField(max_length=100, help_text='The title of the quesiton.')
@@ -31,7 +50,7 @@ class Question(models.Model):
     # Field for entering the text for a question.
     # TODO: Add MathML support to help text
     questionText = models.TextField(
-        help_text='The question text written out, including any multiple choice answers.')
+        help_text='The question text written out, including any multiple choice answers.', name='Question Text')
 
     # Field for entering the correct answer for a question.
     # TODO: Does this need to be a CharField? If answers are all integers this can be changed.
