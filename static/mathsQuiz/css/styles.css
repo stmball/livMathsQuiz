@@ -15,6 +15,7 @@
 .questions-quiz-name {
     margin-top: 5%;
     margin-bottom: 3%;
+    font-size: 4vw;
 }
 
 .quiz {
@@ -79,4 +80,11 @@ input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-i
  
 input[type="number"] {
     -moz-appearance: textfield;
+}
+
+#logo {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 30%;
 }
