@@ -15,7 +15,7 @@
 .questions-quiz-name {
     margin-top: 5%;
     margin-bottom: 3%;
-    font-size: 4vw;
+    font-size: calc(0.3em + 3vw);
 }
 
 .quiz {
@@ -86,5 +86,7 @@ input[type="number"] {
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 30%;
+    width: 20vw;
+    max-width: 300px;
+    min-width: 75px;
 }
