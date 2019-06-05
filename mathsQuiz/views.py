@@ -6,6 +6,7 @@ from django.core.serializers import serialize
 import json
 from datetime import timedelta
 
+
 def index(request):
 
     quizzes = Quiz.objects.filter(active=True)
@@ -20,12 +21,11 @@ def index(request):
 def quiz(request, quizName):
 
     if request.method == 'POST':
-        print(request.body)
         postData = json.loads(request.body)
-        newquiz = get_object_or_404(Quiz,name=postData['quizName'])
+        newquiz = get_object_or_404(Quiz, name=postData['quizName'])
 
-
-        newLog = CompletionLog(quiz=newquiz, name=postData['name'], score=postData['score'], timeTaken=timedelta(milliseconds=postData['delta']), dateComplete=timezone.now())
+        newLog = CompletionLog(quiz=newquiz, name=postData['name'], score=postData['score'], timeTaken=timedelta(
+            milliseconds=postData['delta']), dateComplete=timezone.now())
         newLog.save()
         return HttpResponse(status=201)
         # TODO: Handle POST request for submission of completed quizzes
@@ -36,7 +36,7 @@ def quiz(request, quizName):
         questionSet = quiz.questionSet
 
         # Convert the questions to JSON format for use with the template Javascript code
-        questions = serialize("json", questionSet.questions.all())
+        questions = serialize("json", questionSet.questions.order_by('-title'))
 
         contextList = {
             'quiz': quiz,
