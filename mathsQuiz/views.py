@@ -36,6 +36,8 @@ def quiz(request, quizName):
         questionSet = quiz.questionSet
 
         # Convert the questions to JSON format for use with the template Javascript code
+        print(questionSet.questions.order_by('-title'))
+        print("hello")
         questions = serialize("json", questionSet.questions.order_by('-title'))
 
         contextList = {
