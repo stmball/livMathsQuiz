@@ -57,7 +57,7 @@
     var currentIndex = 0;
 
     // Function for diplaying the new question
-    function updateQuestion(newQuestion) {
+    function updateQuestion(newQuestion, index) {
 
         // Clear the input box
         questionInput.value = ""
@@ -66,7 +66,7 @@
         errorMsg.style.display = 'none'
 
         // Change the old question title and text to the new question title and text
-        questionTitle.innerHTML = newQuestion.fields.title;
+        questionTitle.innerHTML = "Question " + (index + 1);
         questionText.innerHTML = newQuestion.fields['Question Text'];
 
         // Render question using MathJax to enable LaTeX formatting
@@ -116,7 +116,7 @@
                 if (currentIndex < questions.length) {
 
                     // Update the question
-                    updateQuestion(questions[currentIndex]);
+                    updateQuestion(questions[currentIndex], currentIndex);
 
 
                 } else {
@@ -166,7 +166,7 @@
             start = new Date()
 
             // Show first question
-            updateQuestion(questions[0]);
+            updateQuestion(questions[0], 0);
             return true;
         }
     });
