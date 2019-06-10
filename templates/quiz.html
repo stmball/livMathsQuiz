@@ -81,7 +81,7 @@
         if (questionInput.value == currentQuestion.fields.solution) {
             if (showSolutions) {
                 feedback.style.display = 'block';
-                feedback.innerHTML = "Correct!";
+                feedback.innerHTML = "Well done, that's the right answer!";
                 feedback.classList.add("alert-success")
                 feedback.classList.remove("alert-warning")
             }
@@ -91,7 +91,7 @@
         } else {
             if (showSolutions) {
                 feedback.style.display = 'block';
-                feedback.innerHTML = "Incorrect";
+                feedback.innerHTML = "Sorry, you got that one wrong.";
                 feedback.classList.remove("alert-success")
                 feedback.classList.add("alert-warning")
             }
@@ -130,7 +130,7 @@
                     questionTitle.innerHTML = "That’s the end of the quiz."
 
                     // Show score and time taken
-                    questionText.innerHTML = "We hope you enjoyed it. You can try it again if you want.";
+                    questionText.innerHTML = "We hope you enjoyed it. Your score was " + score +  ". You can try it again if you want.";
                     questionInput.style.display = 'none'
                     nextButton.style.display = 'none'
                     document.getElementById('homebtn').style.display = 'block'

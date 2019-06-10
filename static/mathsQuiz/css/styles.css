@@ -46,6 +46,10 @@
     width: 200px !important;
 }
 
+#question-text {
+    font-size: calc(0.5em + 2vw);
+}
+
 #homebtn {
     display: none;
     width: 200px;
