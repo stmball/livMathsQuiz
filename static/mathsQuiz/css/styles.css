@@ -47,7 +47,7 @@
 }
 
 #question-text {
-    font-size: calc(0.5em + 2vw);
+    font-size: calc(1em + 1vw);
 }
 
 #homebtn {
