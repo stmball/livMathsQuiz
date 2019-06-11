@@ -1,4 +1,5 @@
 from django.db import models
+from urllib.parse import quote
 
 # This file defines templates for the different data structures the website will work with. We use Django's model class methods to quickly define what type of data is expected.
 
@@ -9,7 +10,8 @@ class QuestionSet(models.Model):
     # Name for the question set
     name = models.CharField(
         max_length=30, help_text='The name for the question set')
-
+    
+    # Make Django know Question Sets are to be referred to by their name.
     def __str__(self):
         return self.name
 
@@ -28,7 +30,7 @@ class Quiz(models.Model):
         help_text='Tick this if you want solution feedback (eg You got the last question correct!)', default=True)
 
     # Whether or not a quiz is active or not
-    active = models.BooleanField(
+    visible = models.BooleanField(
         help_text='Tick this if the quiz is currently active', default=False)
 
     # This tells Django to refer to Quizzes by their titles.
@@ -37,6 +39,13 @@ class Quiz(models.Model):
 
     class Meta:
         verbose_name_plural = "quizzes"
+
+    # Parse and show url extension of quiz
+    urlPath = models.CharField(max_length=100, help_text="Add this url to the end of the root url to get the quiz")
+
+    def save(self, *args, **kwargs):
+        self.url = quote(self.name)
+        super().save(*args, **kwargs)
 
 
 class Question(models.Model):

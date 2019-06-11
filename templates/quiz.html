@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
+<!-- File for serving, marking and submitting quizzes -->
+
 {% block content %}
 <div class="container">
     <div style="position: relative; width: 100%">
@@ -27,8 +29,11 @@
 
 
 <script type="text/javascript">
+    
+    // This script handles all the generation, marking, feedback and submission of the questions
 
-    // Parse data for Javascript to use.
+
+    // Parse data for Javascript to use by utilizing Django template tags.
     const questions = {{questions|safe}};
     const quizName = "{{quiz.name|safe}}";
     const showSolutions = {{quiz.solutions|lower}};
@@ -150,7 +155,7 @@
                 }
 
             } else {
-
+                // Show error message
                 errorMsg.style.display = "block"
             }
 

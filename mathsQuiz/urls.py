@@ -21,5 +21,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('<str:quizName>/', views.quiz, name='quiz'),
-    path('scoring/', views.scoring, name='scoring'),
 ]
