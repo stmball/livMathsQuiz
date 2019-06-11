@@ -58,4 +58,4 @@ class CompletionLogAdmin(admin.ModelAdmin):
 @admin.register(Quiz)
 class QuizAdmin(admin.ModelAdmin):
     
-    readonly_fields = ('urlPath',)
+    readonly_fields = ('urlpath',)

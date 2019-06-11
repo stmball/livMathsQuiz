@@ -41,7 +41,7 @@ class Quiz(models.Model):
         verbose_name_plural = "quizzes"
 
     # Parse and show url extension of quiz
-    urlPath = models.CharField(max_length=100, help_text="Add this url to the end of the root url to get the quiz", default="")
+    urlpath = models.CharField(max_length=100, help_text="Add this url to the end of the root url to get the quiz", default="")
 
     def save(self, *args, **kwargs):
         self.url = quote(self.name)
