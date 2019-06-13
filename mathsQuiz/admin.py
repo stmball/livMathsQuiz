@@ -13,6 +13,7 @@ admin.site.index_title = "Quiz Dashboard"
 
 admin.site.register(Question)
 admin.site.register(QuestionSet)
+admin.site.register(Quiz)
 
 
 # Class extension to the default date filter to more relevant timescales for the quizzes
