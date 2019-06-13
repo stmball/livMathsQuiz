@@ -54,8 +54,3 @@ class dateCompleteFilter(DateFieldListFilter):
 class CompletionLogAdmin(admin.ModelAdmin):
     list_display = ('quiz','dateComplete', 'name', 'score', 'timeTaken' )
     list_filter = ('quiz', ('dateComplete', dateCompleteFilter))
-
-@admin.register(Quiz)
-class QuizAdmin(admin.ModelAdmin):
-    
-    readonly_fields = ('urlpath',)
