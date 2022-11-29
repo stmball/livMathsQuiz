@@ -1,5 +1,6 @@
 from django.db import models
 from urllib.parse import quote
+from hashlib import md5
 
 # This file defines templates for the different data structures the website will work with. We use Django's model class methods to quickly define what type of data is expected.
 
@@ -59,11 +60,16 @@ class Question(models.Model):
     # Field for entering the correct answer for a question.
     # TODO: Does this need to be a CharField? If answers are all integers this can be changed.
     solution = models.CharField(
-        max_length=100, help_text='The correct solution for the question')
+        max_length=100, help_text='The correct solution for the question (NOTE: On save this is hashed, so may not appear correct on editing!')
 
     # This tells Django to refer to Questions by their title.
     def __str__(self):
         return self.title
+
+
+    def save(self, *args, **kwargs):
+        self.solution = md5(self.solution.encode()).hexdigest()
+        super(Question, self).save(*args, **kwargs)
 
 
 # This model exists to log quiz completions, so they can be viewed by the quiz coordinator. No help text for this one as humans shouldn't be interacting with this model directly.

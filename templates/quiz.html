@@ -83,7 +83,7 @@
     function checkQuestion(currentQuestion) {
 
         // Check to see if the entered value is the same as the solution of the question
-        if (questionInput.value == currentQuestion.fields.solution) {
+        if (CryptoJS.MD5(questionInput.value).toString() == currentQuestion.fields.solution) {
             if (showSolutions) {
                 feedback.style.display = 'block';
                 feedback.innerHTML = "Well done, that's the right answer!";
