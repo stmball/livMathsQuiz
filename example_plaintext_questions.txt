@@ -1,0 +1,6 @@
+Question 1 :: What is \( \frac{2}{3} + \frac{4}{5} \)? (inline maths with backslash ()!):: 22/15
+Question 2 :: What is \[ \frac{2}{3} + \frac{4}{5} \] (block maths with backslash []!):: 22/15
+Question 1 :: What is the captial of France? :: Paris
+Question 2 :: What is the capital of Germany? :: Berlin
+Question 3 :: What is the captial of Italy? :: Rome
+Question 4 :: What is the capital of Spain? :: Madrid

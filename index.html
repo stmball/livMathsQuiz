@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>LivMathsSoc Quiz</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Victor+Mono:ital,wght@0,200;0,400;0,700;1,200;1,400;1,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="./index.css">
+    </head>
+    <body>
+        <nav>
+            <h1>
+                Liverpool Maths Society Quiz
+            </h1>
+            <h3 id="question-number">
+                <!-- Leave blank at the start, JS will fill this in. -->
+            </h3>
+        </nav>
+
+        <div id="question">
+
+            <h3 id="question-title">
+
+            </h3>
+
+            <p id="question-body">
+                <!-- Leave blank at the start, JS will fill this in. -->
+
+            </p>
+
+            <input id="question-input" placeholder="Solution" hidden></input>
+
+            <button id="submit" type="submit">
+                Next
+            </button>
+
+        </div>
+
+        <!-- Load questions into memory -->
+        <script src="./questions.js"></script>
+
+        <!-- Load CryptoJS for hashing -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/core.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+
+        <!-- Load MathsJax for LaTeX Markup -->
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+        <!-- Load main logic for webpage-->
+        <script src="./index.js"></script>
+    </body>
+</html>
